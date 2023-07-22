@@ -1,0 +1,86 @@
+# CDPATH
+cdpath=("$HOME/.vim/pack/plugins/opt")
+
+if [[ "${PATH}" != "*${HOME}/go/bin*" ]]; then
+    # Reset PATH
+    export PATH=$HOME/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/Library/Developer/CommandLineTools/usr/bin:/usr/bin:/bin
+
+    # Append
+    export PATH=$PATH:$HOME/.local/npm/bin
+    export PATH=$PATH:$HOME/go/bin
+    export PATH=$PATH:$HOME/opt/stack/bin
+    export PATH=$PATH:$HOME/opt/jdk/bin
+    export PATH=$PATH:$HOME/opt/maven/bin
+    export PATH=$PATH:$HOME/opt/java-language-server
+    export PATH=$PATH:$HOME/opt/jdtls/bin
+    export PATH=$PATH:$HOME/git/kotlin-language-server/server/build/install/server/bin
+    export PATH=$PATH:$HOME/.cabal/bin
+    export PATH=$PATH:$HOME/.ghcup/bin
+    export PATH=$PATH:/opt/local/bin:/opt/local/sbin
+
+    # Prepend
+    export PATH=/Library/Java/JavaVirtualMachines/openjdk19-oracle/Contents/Home/bin:$PATH
+    export PATH=$HOME/.local/python/bin:$PATH
+    export PATH=$HOME/opt/vim/bin:$PATH
+fi
+
+# Env vars and aliases
+export DEBUGINFOD_URLS=""
+export VAGRANT_DEFAULT_PROVIDER=libvirt
+export VAGRANT_BOX_UPDATE_CHECK_DISABLE=1
+export VAGRANT_CHECKPOINT_DISABLE=1
+export VAGRANT_CWD=$HOME/vagrant
+export VAGRANT_HOME=$HOME/vagrant/templates
+export VAGRANT_VAGRANTFILE=setup.rb
+export ANDROID_HOME=$HOME/Android/Sdk
+export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+export PYTHONUSERBASE=$HOME/.local/python
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk19-oracle/Contents/Home
+export SHELL_SESSIONS_DISABLE=1
+if [ -x "$(command -v javac)" ]; then
+    export JAVA_HOME=`dirname $(dirname $(readlink -f $(which javac)))`
+fi
+
+alias vi="vim -v --noplugin -u NONE"
+alias gg='git grep -n'
+alias xml-pp='xmllint --format -'
+alias dnf="sudo dnf"
+alias fgrep="fgrep --colour"
+alias grep="grep --colour"
+alias egrep="egrep --colour"
+
+case "$OSTYPE" in
+    darwin*)
+        alias ls='ls -G'
+        alias less='less -g'
+        ;;
+esac
+
+if [[ -f ~/.git_bare_env ]]; then
+    source ~/.git_bare_env
+    alias githome-crypt="GIT_DIR=${_git_bare_dir} GIT_WORK_TREE=${_git_bare_root} git-crypt"
+    alias githome="git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root}"
+    
+    githome-setup() {
+        git clone --bare ${_git_bare_url} ${_git_bare_dir}
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} checkout master
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} config --local status.showUntrackedFiles no
+    }
+    
+    githome-add() {
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} add $@ 
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} commit ${_git_bare_root} -m 'update'
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} push origin master
+    }
+    
+    githome-update() {
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} commit ${_git_bare_root} -m 'update'
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} push origin master
+    }
+
+    githome-module-update() {
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} submodule foreach git checkout master -f
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} submodule foreach git branch --set-upstream-to=origin/master master
+        git --git-dir=${_git_bare_dir} --work-tree=${_git_bare_root} submodule foreach git pull --rebase
+    }
+fi

@@ -1,0 +1,3 @@
+_git_bare_root=$HOME
+_git_bare_dir=${_git_bare_root}/.home.git
+_git_bare_url=git@github.com:kohnish/home-minimal.git

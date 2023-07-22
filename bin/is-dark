@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+_cur_hour=`date +%k | xargs`
+is_dark=false
+if [[ $_cur_hour -lt 7 ]] || [[ $_cur_hour -gt 17 ]]; then
+    is_dark=true
+fi
+echo $is_dark

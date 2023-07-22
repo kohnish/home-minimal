@@ -1,0 +1,96 @@
+ipc_socket: false
+live_config_reload: false
+debug:
+  log_level: Off
+
+# key_bindings:
+#   - { key: F10, action: ToggleSimpleFullscreen }
+# key_bindings:
+#   - { key: Return,          mods: Command,                    action: ToggleSimpleFullscreen }
+# key_bindings:
+#   - { key: F,          mods: Control,                    action: ToggleSimpleFullscreen }
+
+
+#font:
+#  size: 18
+#  normal:
+#    family: Ricty
+#    style: Regular
+#  bold:
+#    family: Ricty
+#    style: Bold
+#  italic:
+#    family: Ricty
+#    style: Italic
+
+#window:
+#  opacity: 0.9
+#  # Window dimensions (changes require restart)
+#  #
+#  # Number of lines/columns (not pixels) in the terminal. The number of columns
+#  # must be at least `2`, while using a value of `0` for columns and lines will
+#  # fall back to the window manager's recommended size.
+#  dimensions:
+#    columns: 500
+#    lines: 30
+
+#  # Window position (changes require restart)
+#  #
+#  # Specified in number of pixels.
+#  # If the position is not set, the window manager will handle the placement.
+#  position:
+#    x: 0
+#    y: 0
+
+#  # Window padding (changes require restart)
+#  #
+#  # Blank space added around the window in pixels. This padding is scaled
+#  # by DPI and the specified value is always added at both opposing sides.
+#  #padding:
+#  #  x: 0
+#  #  y: 0
+
+#  # Spread additional padding evenly around the terminal content.
+#  #dynamic_padding: false
+
+#  # Window decorations
+#  #
+#  # Values for `decorations`:
+#  #     - full: Borders and title bar
+#  #     - none: Neither borders nor title bar
+#  #
+#  # Values for `decorations` (macOS only):
+#  #     - transparent: Title bar, transparent background and title bar buttons
+#  #     - buttonless: Title bar, transparent background and no title bar buttons
+#  decorations: none
+
+#colors:
+#  primary:
+#    background: '#000000'
+#    foreground: '#ffffff'
+#  normal:
+#    black:   '#000000'
+#    # red:     '#ff2c4b'
+#    red:     '#8bbe00'
+#    green:   '#8bbe00'
+#    yellow:  '#eeb340'
+#    blue:    '#0a9dff'
+#    magenta: '#ff5990'
+#    cyan:    '#66cdaa'
+#    # white:   '#d9cec3'
+#    white:   '#d9cec3'
+#  bright:
+#    black:   '#998f84'
+#    red:     '#df0021'
+#    # green:   '#aeee00'
+#    green:   '#97cf00'
+#    # yellow:  '#f4cf86'
+#    yellow:  '#d7d701'
+#    # blue:    '#26a8ff'
+#    blue:    '#ff87af'
+#    # magenta: '#ff87af'
+#    magenta: '#ff87af'
+#    cyan:    '#6cbfa3'
+#    white:   '#ffffff'
+#  cursor:
+#    cursor: '#0a9dff'

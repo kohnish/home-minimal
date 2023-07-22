@@ -1,0 +1,8 @@
+xkb_symbols "basic" {
+  include "pc+us"
+  replace key <CAPS> { [ Control_L ] };
+  modifier_map Control { <CAPS> };
+  replace key <HENK> { [ space ] };
+  replace key <MUHE> { [ space ] };
+  replace key <HKTG> { [ space ] };
+};

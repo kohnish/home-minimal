@@ -1,0 +1,180 @@
+vim9script
+
+# defaults.vim
+set nocompatible
+set backspace=indent,eol,start
+set history=10000
+set ruler
+set showcmd
+set wildmenu
+set ttimeout
+set ttimeoutlen=100
+set display=truncate
+set scrolloff=5
+set nrformats-=octal
+set mouse=a
+
+# Custom
+syntax on
+filetype plugin indent on
+set noincsearch
+set ttymouse=sgr
+set re=0
+set iminsert=0
+set imsearch=0
+set nowrapscan
+set number
+set list
+set hlsearch
+set tabstop=8
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set laststatus=2
+set undolevels=1000
+set undoreload=10000
+set undofile
+set undodir=~/.vim/.undo
+set viminfofile=~/.vim/.viminfo
+set directory=~/.vim/.swap
+set backupdir=~/.vim/.backup
+set encoding=utf-8
+set listchars=eol:⏎,tab:├─
+set showbreak=¦>>¦
+set nofixendofline
+set autoindent
+set cinoptions=l1,j1
+set spell spelllang=en_gb
+set updatetime=500
+set synmaxcol=500
+set lazyredraw
+set nottyfast
+set cmdheight=2
+set wildoptions=fuzzy,pum,tagfile
+set pumheight=20
+set completeopt-=preview
+set nofoldenable
+set statusline=%f
+syntax sync minlines=256
+g:termdebug_wide = 1
+g:loaded_matchparen = 1
+g:matchparen_timeout = 1
+g:matchparen_insert_timeout = 1
+
+colorscheme retrobox
+
+# Auto center
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap <C-o> <C-o>zz
+nnoremap <C-i> <C-i>zz
+
+# Autocmd
+augroup Default
+    autocmd!
+    # Stop highlighting :set list (tabs char and etc)
+    autocmd BufNewFile,BufRead * matchadd('NonText', '\n\+')
+    # Vim terminal config
+    autocmd TerminalWinOpen * setlocal nowrap nolinebreak nolist nonumber norelativenumber syntax=off nospell noexpandtab | setfiletype terminal
+    # Quickfix customisations
+    autocmd FileType qf wincmd J | :20wincmd _ | setlocal nolinebreak noexpandtab nospell nolist syntax=off norelativenumber
+    # Disable commenting out automatically
+    autocmd FileType * set fo-=c fo-=r fo-=o
+    # Close quickfix window on leave for vim-lsc
+    autocmd BufLeave * cclose
+    # Detect more log file
+    autocmd BufNewFile,BufRead *.log.[0-9]* set filetype=log
+    # For tmux vim pipe
+    autocmd StdinReadPre * set filetype=log noswapfile nobackup noundofile nospell cmdheight=1 norelativenumber nolist nowrap noshowmode noruler laststatus=0 noshowcmd nonumber | hi Normal guibg=NONE ctermbg=NONE | hi EndOfBuffer guibg=NONE ctermbg=NONE | nnoremap <CR> :quit!<CR> | nnoremap <C-c> :quit!<CR>
+    # Make log file rendering faster
+    autocmd FileType log set nocursorline noswapfile nobackup noundofile nospell
+    # vim-commentary customisation
+    autocmd FileType c,cpp setl cms=//%s
+augroup END
+
+# Don't store {, } in jumplist
+nnoremap } :<C-u>execute "keepjumps norm! " . v:count1 . "}"<CR>
+nnoremap { :<C-u>execute "keepjumps norm! " . v:count1 . "{"<CR>
+
+# Shortcut
+nnoremap Y y$
+
+# Ctags
+set tags=tags;$HOME
+
+# Tab switch shortcuts
+noremap <C-\>gt gt
+noremap <C-\>gT gT
+noremap <C-\>1 1gt
+noremap <C-\>2 2gt
+noremap <C-\>3 3gt
+noremap <C-\>4 4gt
+noremap <C-\>5 5gt
+noremap <C-\>6 6gt
+noremap <C-\>7 7gt
+noremap <C-\>8 8gt
+noremap <C-\>9 9gt
+tnoremap <C-\>gt <C-\><C-n>gt
+tnoremap <C-\>gT <C-\><C-n>gT
+tnoremap <C-\>1 <C-\><C-n>1gt
+tnoremap <C-\>2 <C-\><C-n>2gt
+tnoremap <C-\>3 <C-\><C-n>3gt
+tnoremap <C-\>4 <C-\><C-n>4gt
+tnoremap <C-\>5 <C-\><C-n>5gt
+tnoremap <C-\>6 <C-\><C-n>6gt
+tnoremap <C-\>7 <C-\><C-n>7gt
+tnoremap <C-\>8 <C-\><C-n>8gt
+tnoremap <C-\>9 <C-\><C-n>9gt
+
+# Close a tab/buf and help, quickfix window
+def Close(): void
+    var buf_num = len(tabpagebuflist(tabpagenr()))
+    var tab_num = tabpagenr('$')
+    if buf_num == 1 && tab_num == 1 && !&swapfile
+        quit!
+    elseif buf_num == 1 && tab_num > 1
+        tabclose
+    else
+        helpclose
+        pclose
+        if buf_num > 1 && buf_num == len(tabpagebuflist(tabpagenr()))
+            bdelete
+        endif
+    endif
+enddef
+noremap <C-q> <ScriptCmd>Close()<CR>
+
+# Prevent accidental quit
+cabbrev q <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
+cabbrev close! <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'q!' : 'close')<CR>
+
+# Toggle line number
+def ToggleLineNum(): void
+    if &relativenumber
+        set norelativenumber number nocursorcolumn
+    else
+        set number relativenumber cursorcolumn
+    endif
+enddef
+noremap <F1> <ScriptCmd>ToggleLineNum()<CR>
+
+# Shortcut for toggling format for copypasta
+def FormatToggle(): void
+    if &wrap
+        set nowrap nolinebreak nolist nonumber paste
+    else
+        set wrap linebreak list number nopaste norelativenumber nocursorcolumn
+    endif
+enddef
+noremap <F2> <ScriptCmd>FormatToggle()<CR>
+
+# Osc52
+def Osc52(contents: list<any>): void
+    if len(contents[0]) > 1 || len(contents) > 1
+        system("printf $'\\e]52;c;%s\\a' \"$(cat | base64)\" >> /dev/tty", contents)
+    endif
+enddef
+augroup Osc52Yank
+    autocmd!
+    autocmd TextYankPost * Osc52(v:event.regcontents)
+augroup END

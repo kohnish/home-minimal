@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+if [[ -f /usr/bin/pbcopy ]]; then
+    exec /usr/bin/pbcopy
+elif [[ -e /dev/clipboard ]];then
+    cat /dev/stdin >> /dev/clipboard
+elif [[ -f /etc/wsl.conf ]]; then
+    :
+elif [[ ! -z $WAYLAND_DISPLAY ]]; then
+    stdin="$(</dev/stdin)"
+    printf %s "$stdin" | wl-copy > /dev/null
+    printf %s "$stdin" | wl-copy -p > /dev/null
+elif [[ ! -z $DISPLAY ]]; then
+    cat | xsel -l /dev/null -i > /dev/null
+fi

@@ -1,0 +1,34 @@
+xwayland disable
+default_border pixel 1
+workspace_layout tabbed
+
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+    pointer_accel 0.6
+}
+
+input "type:keyboard" {
+    xkb_layout "custom"
+}
+
+# Enable mouse
+floating_modifier mod4 normal
+
+# Startup
+exec env | fgrep -e I3 -e SWAY -e DBUS -e XDG -e DISPLAY -e WAYLAND > ~/.wayenv
+exec "doas sh -c 'echo 1000 > /sys/class/backlight/intel_backlight/brightness'"
+exec wlsunset -d0 -t1000 -T3000
+exec cpupower frequency-set --max 400Mhz
+
+# Shortcuts
+bindsym control+return exec alacritty
+bindsym mod4+q kill
+bindsym alt+down workspace next
+bindsym alt+up workspace prev
+bindsym ctrl+tab focus next
+bindsym ctrl+shift+tab focus prev
+bindsym ctrl+shift+n floating disable
+bindsym ctrl+shift+d floating enable
+bindsym ctrl+shift+m move scratchpad
+bindsym ctrl+shift+u scratchpad show
